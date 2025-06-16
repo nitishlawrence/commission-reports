@@ -31,6 +31,11 @@
                             <input type="text" id="invoiceNo" required>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerName">Signature person</label>
+                            <input type="text" id="customerName" required>
+                        </div>
                         <div class="form-group">
                             <label for="contactNo">Contact No</label>
                             <input type="tel" id="contactNo" required>
@@ -223,7 +228,7 @@
                     params.append('entry.654321', form.invoiceNo.value);
                     // Add more fields as needed
                     
-                    window.location.href = `https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?${params.toString()}`;
+                    window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSesDslPfVRM9env0JJo91s5Qf9jWZIsdrEjiHXLHdZBLygsag/viewform?${params.toString()}`;
                 };
             };
         });

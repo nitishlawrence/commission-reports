@@ -18,7 +18,7 @@ function generatePDF() {
     
     doc.text(`Company/Client Name: ${form.companyName.value}`, 15, 50);
     doc.text(`Invoice No: ${form.invoiceNo.value}`, 105, 50);
-    doc.text(`Customer Name: ${form.customerName.value}`, 15, 56);
+    doc.text(`Signature person: ${form.customerName.value}`, 15, 56);
     doc.text(`Contact No: ${form.contactNo.value}`, 105, 56);
     doc.text(`Address: ${form.address.value}`, 15, 62);
     doc.text(`Commissioned by: ${form.commissionedBy.value}`, 15, 68);

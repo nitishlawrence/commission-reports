@@ -219,18 +219,21 @@
             };
             
             window.enableNextButton = function() {
-                const nextBtn = document.getElementById('nextButton');
+                  const nextBtn = document.getElementById('nextButton');
                 nextBtn.disabled = false;
+
                 nextBtn.onclick = function() {
-                    const form = document.getElementById('commissioningForm');
-                    const params = new URLSearchParams();
-                    params.append('entry.123456', form.companyName.value);
-                    params.append('entry.654321', form.invoiceNo.value);
-                    // Add more fields as needed
-                    
-                    window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSesDslPfVRM9env0JJo91s5Qf9jWZIsdrEjiHXLHdZBLygsag/viewform?${params.toString()}`;
-                };
+               const form = document.getElementById('commissioningForm');
+               const params = new URLSearchParams();
+
+        // ✅ Use the correct entry IDs from your prefill link
+                  params.append('entry.2050442874', form.companyName.value);
+                  params.append('entry.2140617314', form.invoiceNo.value);
+
+        // ✅ Use your form link exactly, with `usp=pp_url`
+        window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSesDslPfVRM9env0JJo91s5Qf9jWZIsdrEjiHXLHdZBLygsag/viewform?usp=pp_url&${params.toString()}`;
             };
+           };
         });
     </script>
 </body>

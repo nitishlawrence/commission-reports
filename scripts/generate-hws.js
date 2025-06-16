@@ -2,92 +2,186 @@ function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
     const form = document.getElementById('commissioningForm');
-    
-    // Add logo and title
-    doc.addImage('../assets/logo.png', 'PNG', 15, 10, 40, 20);
+
+    const marginX = 15;
+    let y = 20;
+
+    // --- Logo ---
+    doc.addImage('../assets/logo.png', 'PNG', marginX, 5, 40, 20);
+
+    // --- Title ---
+    y = 30;
     doc.setFontSize(16);
-    doc.text('Hot Water System Commissioning Report', 105, 20, { align: 'center' });
-    doc.setFontSize(10);
-    doc.setTextColor(100);
-    
-    // Client Information
+    doc.setFont('helvetica', 'bold');
+    doc.text('Hot Water System Commissioning Report', 105, y, { align: 'center' });
+
+    y += 10;
+
+    // --- CLIENT INFORMATION ---
     doc.setFontSize(12);
-    doc.setTextColor(0);
-    doc.text('CLIENT INFORMATION', 15, 40);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(40, 40, 40);
+    doc.text('CLIENT INFORMATION', marginX, y);
+    y += 5;
+
+    doc.setDrawColor(180);
+    doc.setFillColor(240, 248, 255); // Light blue box
+    doc.rect(marginX, y, 180, 30, 'FD');
+
     doc.setFontSize(10);
-    
-    doc.text(`Company/Client Name: ${form.companyName.value}`, 15, 50);
-    doc.text(`Invoice No: ${form.invoiceNo.value}`, 105, 50);
-    doc.text(`Signature person: ${form.customerName.value}`, 15, 56);
-    doc.text(`Contact No: ${form.contactNo.value}`, 105, 56);
-    doc.text(`Address: ${form.address.value}`, 15, 62);
-    doc.text(`Commissioned by: ${form.commissionedBy.value}`, 15, 68);
-    doc.text(`Commissioning Date: ${form.commissioningDate.value}`, 105, 68);
-    
-    // Product Details
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0);
+
+    doc.text(`Company/Client Name: ${form.companyName.value}`, marginX + 3, y + 6);
+    doc.text(`Invoice No: ${form.invoiceNo.value}`, marginX + 90, y + 6);
+    doc.text(`Signature person: ${form.customerName.value}`, marginX + 3, y + 12);
+    doc.text(`Contact No: ${form.contactNo.value}`, marginX + 90, y + 12);
+    doc.text(`Address: ${form.address.value}`, marginX + 3, y + 18);
+    doc.text(`Commissioned by: ${form.commissionedBy.value}`, marginX + 3, y + 24);
+    doc.text(`Commissioning Date: ${form.commissioningDate.value}`, marginX + 90, y + 24);
+
+    y += 40;
+
+    // --- PRODUCT DETAILS ---
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
-    doc.text('PRODUCT DETAILS', 15, 80);
+    doc.setTextColor(40, 40, 40);
+    doc.text('PRODUCT DETAILS', marginX, y);
+    y += 5;
+
+    doc.setDrawColor(180);
+    doc.setFillColor(240, 248, 255);
+    doc.rect(marginX, y, 180, 12, 'FD');
+
     doc.setFontSize(10);
-    
-    doc.text(`Model: ${form.model.value}`, 15, 86);
-    doc.text(`Capacity: ${form.capacity.value}`, 75, 86);
-    doc.text(`Serial No: ${form.serialNo.value}`, 135, 86);
-    
-    // Installation Check List
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Model: ${form.model.value}`, marginX + 3, y + 8);
+    doc.text(`Capacity: ${form.capacity.value}`, marginX + 65, y + 8);
+    doc.text(`Serial No: ${form.serialNo.value}`, marginX + 130, y + 8);
+
+    y += 20;
+
+    // --- INSTALLATION CHECK LIST ---
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
-    doc.text('INSTALLATION CHECK LIST', 15, 98);
+    doc.setTextColor(40, 40, 40);
+    doc.text('INSTALLATION CHECK LIST', marginX, y);
+    y += 5;
+
+    const installationChecks = [
+        ['PRV Installed', getRadioValue('prv')],
+        ['AIR VENT Installed', getRadioValue('airVent')],
+        ['Placements/Positioning', getRadioValue('placement')],
+        ['Plumbing as per Instructions', getRadioValue('plumbing')],
+        ['Pipe Insulation', getRadioValue('insulation')],
+        ['Any leakage observed', getRadioValue('leakage')]
+    ];
+
+    // Table headers
+    doc.setFillColor(200, 220, 255); // Light blue header
+    doc.rect(marginX, y, 180, 8, 'F');
     doc.setFontSize(10);
-    
-    const getRadioValue = (name) => {
-        return document.querySelector(`input[name="${name}"]:checked`)?.value || 'Not specified';
-    };
-    
-    doc.text(`PRV Installed: ${getRadioValue('prv')}`, 15, 104);
-    doc.text(`AIR VENT Installed: ${getRadioValue('airVent')}`, 15, 110);
-    doc.text(`Placements/positioning: ${getRadioValue('placement')}`, 15, 116);
-    doc.text(`Plumbing as per Instructions: ${getRadioValue('plumbing')}`, 15, 122);
-    doc.text(`Pipe Insulation: ${getRadioValue('insulation')}`, 15, 128);
-    doc.text(`Any leakage observed: ${getRadioValue('leakage')}`, 15, 134);
-    
-    // Operation Check List
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text('Check Item', marginX + 3, y + 5);
+    doc.text('Status', marginX + 140, y + 5);
+    y += 8;
+
+    doc.setFont('helvetica', 'normal');
+
+    installationChecks.forEach(([item, value]) => {
+        doc.setFillColor(245, 250, 255);
+        doc.rect(marginX, y, 180, 8, 'F');
+        doc.setDrawColor(220);
+        doc.rect(marginX, y, 180, 8);
+        doc.text(item, marginX + 3, y + 5);
+        doc.text(value, marginX + 140, y + 5);
+        y += 8;
+    });
+
+    y += 5;
+
+    // --- OPERATION CHECK LIST ---
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
-    doc.text('OPERATION CHECK LIST', 15, 146);
-    doc.setFontSize(10);
-    
-    doc.text(`Cold Water Pressure: ${form.waterPressure.value} bar`, 15, 152);
-    doc.text(`Hardness of Water: ${form.waterHardness.value} ppm`, 15, 158);
-    doc.text(`Hot Water Temperature: ${form.waterTemperature.value} °C`, 15, 164);
-    
-    // Observations
+    doc.setTextColor(40, 40, 40);
+    doc.text('OPERATION CHECK LIST', marginX, y);
+    y += 5;
+
+    const operationChecks = [
+        [`Cold Water Pressure is ${form.waterPressure.value} bar`],
+        [`Hardness of Water is ${form.waterHardness.value} ppm`],
+        [`Hot Water Temperature at Sample Point Nearest Outlet is ${form.waterTemperature.value} °C`]
+    ];
+
+    operationChecks.forEach(([text]) => {
+        doc.setFillColor(230, 240, 255);
+        doc.roundedRect(marginX, y, 180, 8, 2, 2, 'F');
+        doc.setDrawColor(200);
+        doc.roundedRect(marginX, y, 180, 8, 2, 2);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
+        doc.text(text, marginX + 3, y + 5);
+        y += 10;
+    });
+
+    y += 5;
+
+    // --- OBSERVATIONS ---
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
-    doc.text('OBSERVATIONS AND RECOMMENDATIONS', 15, 176);
+    doc.setTextColor(40, 40, 40);
+    doc.text('OBSERVATIONS AND RECOMMENDATIONS', marginX, y);
+    y += 5;
+
+    doc.setFillColor(250, 250, 255);
+    doc.setDrawColor(200);
+    doc.rect(marginX, y, 180, 20, 'FD');
+    const obsText = doc.splitTextToSize(form.observations.value || 'None', 175);
     doc.setFontSize(10);
-    
-    const splitText = doc.splitTextToSize(form.observations.value || 'None', 180);
-    doc.text(splitText, 15, 182);
-    
-    // Signatures
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0);
+    doc.text(obsText, marginX + 3, y + 6);
+
+    y += 30;
+
+    // --- SIGNATURES ---
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
-    doc.text('SIGNATURES', 15, doc.internal.pageSize.height - 50);
-    doc.setFontSize(10);
-    
-    // Convert canvas to image and add to PDF
+    doc.setTextColor(40, 40, 40);
+    doc.text('SIGNATURES', marginX, y);
+    y += 5;
+
     const customerCanvas = document.getElementById('customerSignature');
     const engineerCanvas = document.getElementById('engineerSignature');
-    
+
     html2canvas(customerCanvas).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        doc.addImage(imgData, 'PNG', 15, doc.internal.pageSize.height - 45, 80, 40);
-        doc.text('Customer/Representative', 15, doc.internal.pageSize.height - 5);
-        
+        const customerImg = canvas.toDataURL('image/png');
+        // Smaller and NO border box:
+        doc.addImage(customerImg, 'PNG', marginX + 2, y, 70, 20);
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Customer/Representative', marginX + 2, y + 25);
+
         html2canvas(engineerCanvas).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            doc.addImage(imgData, 'PNG', 115, doc.internal.pageSize.height - 45, 80, 40);
-            doc.text('Service Engineer', 115, doc.internal.pageSize.height - 5);
-            
-            // Save the PDF
+            const engineerImg = canvas.toDataURL('image/png');
+            doc.addImage(engineerImg, 'PNG', marginX + 100, y, 70, 20);
+            doc.text('Service Engineer', marginX + 100, y + 25);
+
+            // --- Footer ---
+            doc.setFontSize(8);
+            doc.setTextColor(120);
+            doc.text('Thank you for choosing Bisineer.', 105, 290, { align: 'center' });
+            doc.text('www.bisineer.com', 105, 295, { align: 'center' });
+
             doc.save(`HWS_Commissioning_${form.invoiceNo.value}.pdf`);
             enableNextButton();
         });
     });
+
+    function getRadioValue(name) {
+        return document.querySelector(`input[name="${name}"]:checked`)?.value || 'Not specified';
+    }
 }

@@ -4,11 +4,41 @@ function generatePDF() {
     const form = document.getElementById('commissioningForm');
 
     const marginX = 15;
-    let y = 20;
 
     // --- Logo ---
-    doc.addImage('../assets/logo.png', 'PNG', marginX, 5, 40, 20);
+doc.addImage('../assets/logo.png', 'PNG', marginX, 5, 40, 20);
 
+// Address block aligned right
+doc.setFontSize(7);
+doc.setFont('helvetica', 'normal');
+doc.setTextColor(0, 0, 0);
+
+// Calculate X for right alignment (page width = 210mm, margin on right = 15mm)
+const pageWidth = 210;
+const rightMargin = 15;
+const addressX = pageWidth - rightMargin;
+
+const addressLines = [
+  '# 6, 29/1-B,',
+  'Konanakunte Industrial Area,',
+  'Amruthnagar Main Road,',
+  'Harinagara Cross, Konanakunte,',
+  'Bengaluru - 560 062.',
+  'Phone: 99000 83176',
+  'E-mail : sales@bisineer.com  •  services@bisineer.com'
+];
+
+// Start Y same as logo top
+let addressY = 6;
+
+addressLines.forEach(line => {
+  doc.text(line, addressX, addressY, { align: 'right' });
+  addressY += 3; // line spacing
+});
+       const logoBottomY = 5 + 20; // logo Y + height
+       const addressBottomY = addressY;
+
+      let y = Math.max(logoBottomY, addressBottomY) + 5;
     // --- Title ---
     y = 30;
     doc.setFontSize(16);

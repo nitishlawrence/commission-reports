@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WTP Commissioning Report</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <img src="../assets/logo.png" alt="Company Logo" class="logo">
+    <h1>Water Treatment Plant Commissioning Report</h1>
+  </header>
+
+  <div class="form-container">
+    <form id="commissioningForm">
+      <!-- Client Information -->
+      <div class="form-section">
+        <h2>Client Information</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="companyName">Company/Client Name</label>
+            <input type="text" id="companyName" required>
+          </div>
+          <div class="form-group">
+            <label for="invoiceNo">Invoice No</label>
+            <input type="text" id="invoiceNo" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customerName">Signature person</label>
+            <input type="text" id="customerName" required>
+          </div>
+          <div class="form-group">
+            <label for="contactNo">Contact No</label>
+            <input type="tel" id="contactNo" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="commissionedBy">Commissioned by</label>
+            <input type="text" id="commissionedBy" required>
+          </div>
+          <div class="form-group">
+            <label for="commissioningDate">Commissioning Date</label>
+            <input type="date" id="commissioningDate" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSTALLATION CHECK LIST -->
+      <div class="form-section">
+        <h2>Installation Check List</h2>
+
+        <div class="form-group">
+          <label>Plumbing Observation</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="plumbingObs" value="Leak-free and Proper" required> Leak-free and Proper</label>
+            <label class="radio-option"><input type="radio" name="plumbingObs" value="Issues Found"> Issues Found</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Pump Plumbing</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="pumpPlumbing" value="Aligned Correctly" required> Aligned Correctly</label>
+            <label class="radio-option"><input type="radio" name="pumpPlumbing" value="Not Aligned"> Not Aligned</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Media Quantity</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="mediaQuantity" value="Correct Quantity" required> Correct Quantity</label>
+            <label class="radio-option"><input type="radio" name="mediaQuantity" value="Insufficient"> Insufficient</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Air Vent & Pressure Gauge</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="ventGauge" value="Proper Placement" required> Proper Placement</label>
+            <label class="radio-option"><input type="radio" name="ventGauge" value="Not Proper"> Not Proper</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPERATION CHECK LIST -->
+      <div class="form-section">
+        <h2>Operation Check List</h2>
+
+        <div class="form-group">
+          <label>Water Level Controller</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="levelController" value="Working" required> Working</label>
+            <label class="radio-option"><input type="radio" name="levelController" value="Not Working"> Not Working</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Input Power Supply (Auto Mode)</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="powerSupply" value="Stable + Auto Mode" required> Stable + Auto Mode</label>
+            <label class="radio-option"><input type="radio" name="powerSupply" value="Manual or Faulty"> Manual or Faulty</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Observations -->
+      <div class="form-section">
+        <h2>Observations and Recommendations</h2>
+        <div class="form-group">
+          <textarea id="observations"></textarea>
+        </div>
+      </div>
+
+      <!-- Signatures -->
+      <div class="form-section">
+        <h2>Signatures</h2>
+        <div class="signature-container">
+          <div class="signature-box">
+            <h3>Customer/Representative Signature</h3>
+            <canvas id="customerSignature" class="signature-pad"></canvas>
+            <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">Clear Signature</button>
+          </div>
+          <div class="signature-box">
+            <h3>Service Engineer Signature</h3>
+            <canvas id="engineerSignature" class="signature-pad"></canvas>
+            <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">Clear Signature</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" class="btn btn-primary" onclick="generatePDF()">Generate PDF</button>
+        <button type="button" class="btn btn-secondary" id="nextButton" disabled>Next</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="../scripts/generate-wtp.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('commissioningDate').value = today;
+  });
+</script>
+</body>
+</html>

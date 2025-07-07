@@ -148,11 +148,65 @@
   </div>
 </div>
 <script src="../scripts/generate-wtp.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('commissioningDate').value = today;
-  });
-</script>
+    <script>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('commissioningDate').value = today;
+            
+            // Initialize signature pads
+            const customerCanvas = document.getElementById('customerSignature');
+            const engineerCanvas = document.getElementById('engineerSignature');
+            
+            const customerSigPad = new SignaturePad(customerCanvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+            
+            const engineerSigPad = new SignaturePad(engineerCanvas, {
+                backgroundColor: 'rgb(255, 255, 255)',
+                penColor: 'rgb(0, 0, 0)'
+            });
+            
+            // Handle window resize
+            function resizeCanvas() {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                
+                [customerCanvas, engineerCanvas].forEach(canvas => {
+                    canvas.width = canvas.offsetWidth * ratio;
+                    canvas.height = canvas.offsetHeight * ratio;
+                    canvas.getContext('2d').scale(ratio, ratio);
+                });
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            window.clearSignature = function(canvasId) {
+                if (canvasId === 'customerSignature') {
+                    customerSigPad.clear();
+                } else {
+                    engineerSigPad.clear();
+                }
+            };
+            
+            window.enableNextButton = function() {
+                  const nextBtn = document.getElementById('nextButton');
+                nextBtn.disabled = false;
+
+                nextBtn.onclick = function() {
+               const form = document.getElementById('commissioningForm');
+               const params = new URLSearchParams();
+
+        // ✅ Use the correct entry IDs from your prefill link
+                  params.append('entry.2050442874', form.companyName.value);
+                  params.append('entry.2140617314', form.invoiceNo.value);
+
+        // ✅ Use your form link exactly, with `usp=pp_url`
+        window.location.href = `https://docs.google.com/forms/d/e/1FAIpQLSesDslPfVRM9env0JJo91s5Qf9jWZIsdrEjiHXLHdZBLygsag/viewform?usp=pp_url&${params.toString()}`;
+            };
+           };
+        });
+    </script>
 </body>
 </html>

@@ -6,45 +6,42 @@ function generatePDF() {
     const marginX = 15;
 
     // --- Logo ---
-doc.addImage('../assets/logo.png', 'PNG', marginX, 5, 40, 20);
+    doc.addImage('../assets/logo.png', 'PNG', marginX, 5, 40, 20);
 
-// Address block aligned right
-doc.setFontSize(7);
-doc.setFont('helvetica', 'normal');
-doc.setTextColor(0, 0, 0);
+    // Address block aligned right
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0);
 
-// Calculate X for right alignment (page width = 210mm, margin on right = 15mm)
-const pageWidth = 210;
-const rightMargin = 15;
-const addressX = pageWidth - rightMargin;
+    const pageWidth = 210;
+    const rightMargin = 15;
+    const addressX = pageWidth - rightMargin;
 
-const addressLines = [
-  '# 6, 29/1-B,',
-  'Konanakunte Industrial Area,',
-  'Amruthnagar Main Road,',
-  'Harinagara Cross, Konanakunte,',
-  'Bengaluru - 560 062.',
-  'Phone: 99000 83176',
-  'E-mail : sales@bisineer.com  •  services@bisineer.com'
-];
+    const addressLines = [
+        '# 6, 29/1-B,',
+        'Konanakunte Industrial Area,',
+        'Amruthnagar Main Road,',
+        'Harinagara Cross, Konanakunte,',
+        'Bengaluru - 560 062.',
+        'Phone: 99000 83176',
+        'E-mail : sales@bisineer.com  •  services@bisineer.com'
+    ];
 
-// Start Y same as logo top
-let addressY = 6;
+    let addressY = 6;
+    addressLines.forEach(line => {
+        doc.text(line, addressX, addressY, { align: 'right' });
+        addressY += 3;
+    });
 
-addressLines.forEach(line => {
-  doc.text(line, addressX, addressY, { align: 'right' });
-  addressY += 3; // line spacing
-});
-       const logoBottomY = 5 + 20; // logo Y + height
-       const addressBottomY = addressY;
+    const logoBottomY = 5 + 20;
+    const addressBottomY = addressY;
+    let y = Math.max(logoBottomY, addressBottomY) + 5;
 
-      let y = Math.max(logoBottomY, addressBottomY) + 5;
     // --- Title ---
     y = 30;
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text('Hot Water System Commissioning Report', 105, y, { align: 'center' });
-
+    doc.text('RO System Commissioning Report', 105, y, { align: 'center' });
     y += 10;
 
     // --- CLIENT INFORMATION ---
@@ -55,13 +52,12 @@ addressLines.forEach(line => {
     y += 5;
 
     doc.setDrawColor(180);
-    doc.setFillColor(240, 248, 255); // Light blue box
+    doc.setFillColor(240, 248, 255);
     doc.rect(marginX, y, 180, 30, 'FD');
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(0, 0, 0);
-
     doc.text(`Company/Client Name: ${form.companyName.value}`, marginX + 3, y + 6);
     doc.text(`Invoice No: ${form.invoiceNo.value}`, marginX + 90, y + 6);
     doc.text(`Signature person: ${form.customerName.value}`, marginX + 3, y + 12);
@@ -99,35 +95,26 @@ addressLines.forEach(line => {
     doc.text('INSTALLATION CHECK LIST', marginX, y);
     y += 5;
 
-    const installationChecks = [
-        ['PRV Installed', getRadioValue('prv')],
-        ['AIR VENT Installed', getRadioValue('airVent')],
-        ['Placements/Positioning', getRadioValue('placement')],
-        ['Plumbing as per Instructions', getRadioValue('plumbing')],
-        ['Pipe Insulation', getRadioValue('insulation')],
-        ['Any leakage observed', getRadioValue('leakage')]
+    const installationFields = [
+        ['Plumbing Observation', form.plumbingObservation.value],
+        ['Pump Plumbing', form.pumpPlumbing.value],
+        ['Water in Sump Tank', form.sumpTank.value],
+        ['Water Level Controller', form.waterLevelController.value],
+        ['Air Vent & Pressure Gauge', form.airVent.value],
+        ['Control Panel', form.controlPanel.value],
+        ['RO Flushing', form.roFlushing.value]
     ];
 
-    // Table headers
-    doc.setFillColor(200, 220, 255); // Light blue header
-    doc.rect(marginX, y, 180, 8, 'F');
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 0, 0);
-    doc.text('Check Item', marginX + 3, y + 5);
-    doc.text('Status', marginX + 140, y + 5);
-    y += 8;
-
-    doc.setFont('helvetica', 'normal');
-
-    installationChecks.forEach(([item, value]) => {
-        doc.setFillColor(245, 250, 255);
-        doc.rect(marginX, y, 180, 8, 'F');
+    installationFields.forEach(([label, val]) => {
+        doc.setFillColor(250, 255, 255);
+        doc.rect(marginX, y, 180, 8, 'FD');
         doc.setDrawColor(220);
         doc.rect(marginX, y, 180, 8);
-        doc.text(item, marginX + 3, y + 5);
-        doc.text(value, marginX + 140, y + 5);
-        y += 8;
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
+        doc.text(`${label}: ${val}`, marginX + 3, y + 5);
+        y += 9;
     });
 
     y += 5;
@@ -139,21 +126,19 @@ addressLines.forEach(line => {
     doc.text('OPERATION CHECK LIST', marginX, y);
     y += 5;
 
-    const operationChecks = [
-        [`Cold Water Pressure is ${form.waterPressure.value} bar`],
-        [`Hardness of Water is ${form.waterHardness.value} ppm`],
-        [`Hot Water Temperature at Sample Point Nearest Outlet is ${form.waterTemperature.value} °C`]
+    const opFields = [
+        ['Media Quantity', form.mediaQuantity.value],
+        ['Input Power Supply', form.inputPower.value],
+        ['Pressure Observed At', form.pressureObserved.value],
+        ['FEED Flow', form.feedFlow.value],
+        ['Product Flow', form.productFlow.value]
     ];
 
-    operationChecks.forEach(([text]) => {
-        doc.setFillColor(230, 240, 255);
-        doc.roundedRect(marginX, y, 180, 8, 2, 2, 'F');
-        doc.setDrawColor(200);
-        doc.roundedRect(marginX, y, 180, 8, 2, 2);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0, 0, 0);
-        doc.text(text, marginX + 3, y + 5);
+    opFields.forEach(([label, val]) => {
+        doc.setFillColor(245, 250, 255);
+        doc.roundedRect(marginX, y, 180, 8, 2, 2, 'FD');
+        doc.setDrawColor(220);
+        doc.text(`${label}: ${val}`, marginX + 3, y + 5);
         y += 10;
     });
 
@@ -189,7 +174,6 @@ addressLines.forEach(line => {
 
     html2canvas(customerCanvas).then(canvas => {
         const customerImg = canvas.toDataURL('image/png');
-        // Smaller and NO border box:
         doc.addImage(customerImg, 'PNG', marginX + 2, y, 70, 20);
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
@@ -200,20 +184,20 @@ addressLines.forEach(line => {
             doc.addImage(engineerImg, 'PNG', marginX + 100, y, 70, 20);
             doc.text('Service Engineer', marginX + 100, y + 25);
 
-            // --- Footer ---
             doc.setFontSize(8);
             doc.setTextColor(120);
             doc.text('Thank you for choosing Bisineer.', 105, 290, { align: 'center' });
             doc.text('www.bisineer.com', 105, 295, { align: 'center' });
 
-            doc.save(`HWS_Commissioning_${form.invoiceNo.value}.pdf`);
+            doc.save(`RO_Commissioning_${form.invoiceNo.value}.pdf`);
             enableNextButton();
         });
     });
+}
 
-    function getRadioValue(name) {
-        return document.querySelector(`input[name="${name}"]:checked`)?.value || 'Not specified';
-    }
+function enableNextButton() {
+    const btn = document.getElementById('nextButton');
+    if (btn) btn.disabled = false;
 }
 function enableNextButton() {
   const nextBtn = document.getElementById('nextButton');

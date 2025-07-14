@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RO Commissioning Report</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="../assets/logo.png" alt="Company Logo" class="logo">
+      <h1>RO System Commissioning Report</h1>
+    </header>
+
+    <div class="form-container">
+      <form id="commissioningForm">
+        <!-- Client Info -->
+        <div class="form-section">
+          <h2>Client Information</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="companyName">Company/Client Name</label>
+              <input type="text" id="companyName" required>
+            </div>
+            <div class="form-group">
+              <label for="invoiceNo">Invoice No</label>
+              <input type="text" id="invoiceNo" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customerName">Signature person</label>
+              <input type="text" id="customerName" required>
+            </div>
+            <div class="form-group">
+              <label for="contactNo">Contact No</label>
+              <input type="tel" id="contactNo" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input type="text" id="address" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="commissionedBy">Commissioned by</label>
+              <input type="text" id="commissionedBy" required>
+            </div>
+            <div class="form-group">
+              <label for="commissioningDate">Commissioning Date</label>
+              <input type="date" id="commissioningDate" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="form-section">
+          <h2>Product Details</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="model">Model</label>
+              <input type="text" id="model" required>
+            </div>
+            <div class="form-group">
+              <label for="capacity">Capacity</label>
+              <input type="text" id="capacity" required>
+            </div>
+            <div class="form-group">
+              <label for="serialNo">Serial No</label>
+              <input type="text" id="serialNo" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Installation Check List -->
+        <div class="form-section">
+          <h2>Installation Check List</h2>
+
+          <div class="form-group">
+            <label>Plumbing Observation</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="plumbingObservation" value="Leak-free and Proper"> Leak-free and Proper</label>
+              <label class="radio-option"><input type="radio" name="plumbingObservation" value="Issues Found"> Issues Found</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Pump Plumbing</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="pumpPlumbing" value="Aligned Correctly"> Aligned Correctly</label>
+              <label class="radio-option"><input type="radio" name="pumpPlumbing" value="Not Aligned"> Not Aligned</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Water in Sump Tank</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="sumpTank" value="Available"> Available</label>
+              <label class="radio-option"><input type="radio" name="sumpTank" value="Not Available"> Not Available</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Water Level Controller</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="waterLevelController" value="Working"> Working</label>
+              <label class="radio-option"><input type="radio" name="waterLevelController" value="Not Working"> Not Working</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Air Vent & Pressure Gauge</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="airVent" value="Proper Placement"> Proper Placement</label>
+              <label class="radio-option"><input type="radio" name="airVent" value="Not Proper"> Not Proper</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Control Panel</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="controlPanel" value="Manual"> Manual</label>
+              <label class="radio-option"><input type="radio" name="controlPanel" value="Auto Mode"> Auto Mode</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>RO Flushing</label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="roFlushing" value="Auto Run Successful"> Auto Run Successful</label>
+              <label class="radio-option"><input type="radio" name="roFlushing" value="Manual"> Manual</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operation Check List -->
+        <div class="form-section">
+          <h2>Operation Check List</h2>
+          <div class="form-group">
+            <label for="mediaQuantity">Media Quantity (Carbon & Sand Filter)</label>
+            <input type="text" id="mediaQuantity" placeholder="e.g., 150 kg / 200 ltr">
+          </div>
+          <div class="form-group">
+            <label for="inputPower">Input Power Supply</label>
+            <input type="text" id="inputPower" placeholder="e.g., 2.5 KW">
+          </div>
+          <div class="form-group">
+            <label for="pressureObserved">Pressure Observed At</label>
+            <input type="text" id="pressureObserved" placeholder="e.g., 3.5 bar">
+          </div>
+          <div class="form-group">
+            <label for="feedFlow">FEED Flow</label>
+            <input type="text" id="feedFlow" placeholder="e.g., 1000 lph">
+          </div>
+          <div class="form-group">
+            <label for="productFlow">Product Flow</label>
+            <input type="text" id="productFlow" placeholder="e.g., 800 lph">
+          </div>
+        </div>
+
+        <!-- Observations -->
+        <div class="form-section">
+          <h2>Observations and Recommendations</h2>
+          <div class="form-group">
+            <textarea id="observations" placeholder="Enter any additional notes here..."></textarea>
+          </div>
+        </div>
+
+        <!-- Signatures -->
+        <div class="form-section">
+          <h2>Signatures</h2>
+          <div class="signature-container">
+            <div class="signature-box">
+              <h3>Customer/Representative Signature</h3>
+              <canvas id="customerSignature" class="signature-pad"></canvas>
+              <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">Clear Signature</button>
+            </div>
+            <div class="signature-box">
+              <h3>Service Engineer Signature</h3>
+              <canvas id="engineerSignature" class="signature-pad"></canvas>
+              <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">Clear Signature</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button type="button" class="btn btn-primary" onclick="generatePDF()">Generate PDF</button>
+          <button type="button" class="btn btn-secondary" id="nextButton" disabled>Next</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../scripts/generate-ro.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('commissioningDate').value = new Date().toISOString().split('T')[0];
+
+      const customerSigPad = new SignaturePad(document.getElementById('customerSignature'), {
+        backgroundColor: 'rgb(255,255,255)', penColor: 'rgb(0,0,0)'
+      });
+      const engineerSigPad = new SignaturePad(document.getElementById('engineerSignature'), {
+        backgroundColor: 'rgb(255,255,255)', penColor: 'rgb(0,0,0)'
+      });
+
+      function resizeCanvas(canvas) {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        canvas.getContext('2d').scale(ratio, ratio);
+      }
+
+      resizeCanvas(document.getElementById('customerSignature'));
+      resizeCanvas(document.getElementById('engineerSignature'));
+
+      window.clearSignature = function (id) {
+        if (id === 'customerSignature') customerSigPad.clear();
+        else engineerSigPad.clear();
+      };
+    });
+  </script>
+</body>
+</html>

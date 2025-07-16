@@ -97,9 +97,10 @@ function generatePDF() {
 
     const installationFields = [
         ['Plumbing Observation', form.plumbingObservation.value],
-        ['Air Vent & Pressure Gauge', form.airVent.value],
-        ['Control Panel', form.controlPanel.value],
-        ['RO Flushing', form.roFlushing.value]
+        ['Union & Valve (Inlet & Outlet)', form.Union.value],
+        ['Tank Sensor', form.tankSensor.value],
+        ['Vibration Damper', form.vibrationdamper.value],
+        ['Drain Pipe', form.drainPipe.value]
     ];
 
     installationFields.forEach(([label, val]) => {
@@ -124,11 +125,9 @@ function generatePDF() {
     y += 5;
 
     const opFields = [
-        ['Media Quantity', form.mediaQuantity.value],
-        ['Input Power Supply', form.inputPower.value],
-        ['Pressure Observed At', form.pressureObserved.value],
-        ['FEED Flow', form.feedFlow.value],
-        ['Product Flow', form.productFlow.value]
+        ['Compressor Voltage / Current', form.compressorVoltage.value],
+        ['Heat Pump Input Power', form.heatPumpPower.value],
+        ['Pressure Observed At', form.pressureObserved.value]
     ];
 
     opFields.forEach(([label, val]) => {

@@ -127,7 +127,7 @@ function generatePDF() {
     const opFields = [
         ['Compressor Voltage / Current', form.compressorVoltage.value],
         ['Heat Pump Input Power', form.heatPumpPower.value],
-        ['Pressure Observed At', form.pressureObserved.value]
+        ['Standing pressure with Ambient Temperature', form.standingPressure.value]
     ];
 
     opFields.forEach(([label, val]) => {

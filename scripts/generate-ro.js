@@ -115,7 +115,7 @@ function generatePDF() {
 
     doc.setFont('helvetica', 'normal');
 
-    installationFields.forEach(([label, val]) => {
+    installationFields.forEach(([item, value]) => {
         doc.setFillColor(250, 255, 255);
         doc.rect(marginX, y, 180, 8, 'FD');
         doc.setDrawColor(220);

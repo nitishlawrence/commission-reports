@@ -37,7 +37,6 @@ addressLines.forEach(line => {
 });
        const logoBottomY = 5 + 20; // logo Y + height
        const addressBottomY = addressY;
-
       let y = Math.max(logoBottomY, addressBottomY) + 5;
     // --- Title ---
     y = 30;

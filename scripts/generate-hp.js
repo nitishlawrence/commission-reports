@@ -41,7 +41,7 @@ function generatePDF() {
     y = 30;
     doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text('RO System Commissioning Report', 105, y, { align: 'center' });
+    doc.text('Heat Pump Commissioning Report', 105, y, { align: 'center' });
     y += 10;
 
     // --- CLIENT INFORMATION ---
@@ -103,16 +103,26 @@ function generatePDF() {
         ['Drain Pipe', form.drainPipe.value]
     ];
 
+        // Table headers
+    doc.setFillColor(200, 220, 255); // Light blue header
+    doc.rect(marginX, y, 180, 8, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 0, 0);
+    doc.text('Check Item', marginX + 3, y + 5);
+    doc.text('Status', marginX + 140, y + 5);
+    y += 8;
+
+    doc.setFont('helvetica', 'normal');
+
     installationFields.forEach(([label, val]) => {
         doc.setFillColor(250, 255, 255);
         doc.rect(marginX, y, 180, 8, 'FD');
         doc.setDrawColor(220);
         doc.rect(marginX, y, 180, 8);
-        doc.setFontSize(10);
-        doc.setFont('helvetica', 'normal');
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${label}: ${val}`, marginX + 3, y + 5);
-        y += 9;
+        doc.text(item, marginX + 3, y + 5);
+        doc.text(value, marginX + 140, y + 5);
+        y += 8;
     });
 
     y += 5;
@@ -125,16 +135,20 @@ function generatePDF() {
     y += 5;
 
     const opFields = [
-        ['Compressor Voltage / Current', form.compressorVoltage.value],
-        ['Heat Pump Input Power', form.heatPumpPower.value],
-        ['Standing pressure with Ambient Temperature', form.standingPressure.value]
+        [`Compressor Voltage / Current is ${form.compressorVoltage.value}`],
+        [`Heat Pump Input Power is ${form.heatPumpPower.value}`],
+        [`Standing pressure with Ambient Temperature is ${form.standingPressure.value}`]
     ];
 
-    opFields.forEach(([label, val]) => {
-        doc.setFillColor(245, 250, 255);
-        doc.roundedRect(marginX, y, 180, 8, 2, 2, 'FD');
-        doc.setDrawColor(220);
-        doc.text(`${label}: ${val}`, marginX + 3, y + 5);
+    opFields.forEach(([text]) => {
+        doc.setFillColor(230, 240, 255);
+        doc.roundedRect(marginX, y, 180, 8, 2, 2, 'F');
+        doc.setDrawColor(200);
+        doc.roundedRect(marginX, y, 180, 8, 2, 2);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(0, 0, 0);
+        doc.text(text, marginX + 3, y + 5);
         y += 10;
     });
 
@@ -185,7 +199,7 @@ function generatePDF() {
             doc.text('Thank you for choosing Bisineer.', 105, 290, { align: 'center' });
             doc.text('www.bisineer.com', 105, 295, { align: 'center' });
 
-            doc.save(`RO_Commissioning_${form.invoiceNo.value}.pdf`);
+            doc.save(`HP_Commissioning_${form.invoiceNo.value}.pdf`);
             enableNextButton();
         });
     });
